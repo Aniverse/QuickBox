@@ -151,16 +151,6 @@ function _askquota() {
     esac
 }
 
-function _ask10g() {
-  echo -ne "${bold}${yellow}Is this a 10 gigabit server?${normal} (Default: ${green}${bold}N${normal}) "; read input
-    case $input in
-      [yY] | [yY][Ee][Ss] )   if [[ -d /install ]]; then cd /; else mkdir /install; fi;touch /install/.10g.lock;echo "${bold}The devs are officially jealous${normal}" ;;
-      [nN] | [nN][Oo] | "" ) echo "${cyan}Who can afford that stuff anyway?${normal}" ;;
-    *)  echo "${cyan}Who can afford that stuff anyway?${normal}"  ;;
-    esac
-    echo
-}
-
 # primary partition question
 function _askpartition() {
   if [[ $quota == yes ]]; then
@@ -1241,10 +1231,6 @@ function _rconf() {
   sed -i "s/USERNAME/${username}/g" /home/${username}/.rtorrent.rc
   sed -i "s/XXX/${PORT}/g" /home/${username}/.rtorrent.rc
   sed -i "s/YYY/${PORTEND}/g" /home/${username}/.rtorrent.rc
-  if [[ -f /install/.10g.lock ]]; then
-    sed -i "s/hrottle.max_peers.normal.set = 100/hrottle.max_peers.normal.set = 300/g" /home/${username}/.rtorrent.rc
-    sed -i "s/throttle.max_uploads.global.set = 100/throttle.max_uploads.global.set = 300/g" /home/${username}/.rtorrent.rc
-  fi
 }
 
 # function to set proper diskspace plugin (26)
@@ -1624,7 +1610,6 @@ clear
 
 #_askservices
 _askpartition
-_ask10g
 _askrtorrent
 _askdeluge
 _asktr
